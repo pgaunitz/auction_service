@@ -32,4 +32,4 @@ const getAuction = async (event, context) => {
   };
 };
 
-export const handler = commonMiddleware(getAuction)
+export const handler = commonMiddleware(getAuction);
