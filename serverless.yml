@@ -14,11 +14,11 @@ provider:
   environment:
     AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
   iamRoleStatements:
-   - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
+    - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
 
 resources:
   Resources:
-   AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
+    AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
 
 functions:
   createAuction:
@@ -28,7 +28,14 @@ functions:
           method: POST
           path: /auction
 
+  getAuction:
+    handler: src/handlers/getAuctions.handler
+    events:
+      - http:
+          method: GET
+          path: /auctions
+
 custom:
   AuctionsTable:
-   name: !Ref AuctionsTable
-   arn: !GetAtt AuctionsTable.Arn
+    name: !Ref AuctionsTable
+    arn: !GetAtt AuctionsTable.Arn
