@@ -8,11 +8,11 @@ export async function getEndedAuctions() {
     TableName: process.env.AUCTIONS_TABLE_NAME,
     IndexName: "statusAndEndDate",
     KeyConditionExpression: "#status = :status AND endingAt <= :now",
-    ExpressionAttributesValuses: {
+    ExpressionAttributeValues: {
       ":status": "OPEN",
       ":now": now.toISOString(),
     },
-    ExpressionAttributesNames: {
+    ExpressionAttributeNames: {
       "#status": "status",
     },
   };
