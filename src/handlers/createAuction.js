@@ -1,7 +1,9 @@
 import { v4 as uuid } from "uuid";
 import AWS from "aws-sdk";
+import validator from "@middy/validator";
 import commonMiddleware from "../lib/commonMiddleware";
 import createError from "http-errors";
+import createActionsSchema from "../lib/schemas/createAuctionSchema";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -22,6 +24,10 @@ const createAuction = async (event, context) => {
     },
   };
 
+  if (!auction.title) {
+    throw new createError.Forbidden(`Title cannot be empty`);
+  }
+
   try {
     await dynamodb
       .put({
@@ -40,4 +46,6 @@ const createAuction = async (event, context) => {
   };
 };
 
-export const handler = commonMiddleware(createAuction);
+export const handler = commonMiddleware(createAuction).use(
+  validator({ inputSchema: createActionsSchema })
+);
